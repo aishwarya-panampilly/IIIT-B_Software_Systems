@@ -1,10 +1,12 @@
 /***************************************************************************************************
- *Name: Aishwarya J Panampilly
+ *Name: 1.c
+ *Author: Aishwarya J Panampilly
  *Reg.No: MT2024011
- *Problem Statement : Create the following types of a files using (i) shell command (ii) system call
+ *Description : Create the following types of a files using (i) shell command (ii) system call
                       a. soft link (symlink system call)
                       b. hard link (link system call)
                       c. FIFO (mkfifo Library Function or mknod system call) 
+ *Date: 29th August,2024
 ***************************************************************************************************/
 
 /******************************************SOLUTION************************************************/
@@ -95,7 +97,75 @@ int main()
   return 0;
 }
   
+/******************************************OUTPUT***********************************************/
+/***** SHELL COMMAND *****/
+/*
+  Soft Link
+  aishjp@Aish-Linux:~/my-repo$ ln -s file1.txt file2.txt
+  aishjp@Aish-Linux:~/my-repo$ ls -l file1.txt file2.txt
+  -rw-rw-r-- 1 aishjp aishjp 54 Aug 22 08:36 file1.txt
+  lrwxrwxrwx 1 aishjp aishjp  9 Aug 29 07:27 file2.txt -> file1.txt
   
+  Hard Link
+  aishjp@Aish-Linux:~/my-repo$ ln file1.txt file3.txt
+  aishjp@Aish-Linux:~/my-repo$ ls -l file1.txt file3.txt
+  -rw-rw-r-- 2 aishjp aishjp 54 Aug 22 08:36 file1.txt
+  -rw-rw-r-- 2 aishjp aishjp 54 Aug 22 08:36 file3.txt
+  aishjp@Aish-Linux:~/my-repo$ find . -samefile file1.txt
+  ./file1.txt
+  ./file3.txt
   
+  FIFO
+  aishjp@Aish-Linux:~/my-repo$ mkfifo 1prog
+  aishjp@Aish-Linux:~/my-repo$ echo "Hello World!" > 1prog &
+  [1] 20727
+  aishjp@Aish-Linux:~/my-repo$ cat 1prog
+  Hello World!
+  [1]+  Done                    echo "Hello World!" > 1prog
+  aishjp@Aish-Linux:~/my-repo$ ls -l 1prog
+  prw-rw-r-- 1 aishjp aishjp 0 Aug 29 07:34 1prog
+  
+*/
+/****** PROGRAM ******/
+/*
+  aishjp@Aish-Linux:~/my-repo$ gcc 1.c
+  aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Choose Option for file4.txt 
+    1. Soft Link 
+    2. Hard Link 
+    3. FIFO 
+    4. Exit
+  1
+  Soft Link from file5.txt to file4.txt created successfully
+  Choose Option for file4.txt 
+    1. Soft Link 
+    2. Hard Link 
+    3. FIFO 
+    4. Exit
+  2
+  Hard Link created successfully.file4.txt and file6.txt linked to same data
+  Choose Option for file4.txt 
+    1. Soft Link 
+    2. Hard Link 
+    3. FIFO 
+    4. Exit
+  3
+  FIFO file titled file7.txt created successfully
+  Choose Option for file4.txt 
+    1. Soft Link 
+    2. Hard Link 
+    3. FIFO 
+    4. Exit
+  4
+  aishjp@Aish-Linux:~/my-repo$ ls -l file4.txt file5.txt file6.txt file7.txt
+  -rw-rw-r-- 2 aishjp aishjp 0 Aug 29 07:20 file4.txt
+  lrwxrwxrwx 1 aishjp aishjp 9 Aug 29 07:20 file5.txt -> file4.txt
+  -rw-rw-r-- 2 aishjp aishjp 0 Aug 29 07:20 file6.txt
+  prw-rw-r-- 1 aishjp aishjp 0 Aug 29 07:20 file7.txt
+  aishjp@Aish-Linux:~/my-repo$ find . -samefile file4.txt
+  ./file6.txt
+  ./file4.txt
+
+*/  
 
 
