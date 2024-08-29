@@ -1,7 +1,9 @@
 /***************************************************************************************************
- *Name: Aishwarya J Panampilly
+ *Name : 15.c
+ *Author: Aishwarya J Panampilly
  *Reg.No: MT2024011
- *Problem Statement : Write a program to display the environmental variable of the user (use environ)
+ *Description : Write a program to display the environmental variable of the user (use environ)
+ *Date : 30th August,2024
 ***************************************************************************************************/
 
 /******************************************SOLUTION************************************************/
