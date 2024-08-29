@@ -23,6 +23,7 @@ int main()
         // while getppid() will return parent process id
         printf("Parent process\n");
         printf("ID : %d\n\n", getpid());
+        sleep(2);
     }
     else if (pid == 0) {
         printf("Child process\n");
@@ -30,8 +31,7 @@ int main()
         printf("ID: %d\n", getpid());
         // getppid() will return parent process id of child process
         printf("Parent -ID: %d\n\n", getppid());
-
-        sleep(10);
+        sleep(3);
 
         // At this time parent process has finished.
         // So if u will check parent process id
@@ -39,6 +39,7 @@ int main()
         printf("\nChild process \n");
         printf("ID: %d\n", getpid());
         printf("Parent -ID: %d\n", getppid());
+        
     }
     else {
         printf("Failed to create child process");
@@ -56,7 +57,7 @@ int main()
 
   Child process
   ID: 33284
-  Parent -ID: 2487
+  Parent -ID: 33283
   
   aishjp@Aish-Linux:~/my-repo$ 
   Child process 
