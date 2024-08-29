@@ -56,5 +56,11 @@ int main() {
   hello there
   Data is available on STDIN!
   You entered: hello there
+  
+  aishjp@Aish-Linux:~/my-repo$ gcc 13.c
+  aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Waiting for input on STDIN (10 seconds)...
+  No data was entered within 10 seconds.
+
 */
 
