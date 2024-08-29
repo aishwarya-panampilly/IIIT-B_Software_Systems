@@ -47,3 +47,20 @@ int main()
     return 0;
 }
 
+/******************************************OUTPUT************************************************/
+/*
+  aishjp@Aish-Linux:~/my-repo$ gcc 24.c
+  aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Parent process
+  ID : 33283
+
+  Child process
+  ID: 33284
+  Parent -ID: 2487
+  
+  aishjp@Aish-Linux:~/my-repo$ 
+  Child process 
+  ID: 33284
+  Parent -ID: 2487
+*/
+
