@@ -22,11 +22,24 @@
 #include<sys/stat.h>
 #include<fcntl.h>
 #include<time.h>
+#include<string.h>
+#include<stdlib.h>
+#define MAX_LENGTH 256
 int main() 
 {
+  char filename[MAX_LENGTH];
+  // opening read and write mode withour O_EXCL
+  printf ("Enter filename: ");
+  if (fgets(filename, sizeof(filename), stdin) == NULL) {
+        perror("fgets");
+        exit(EXIT_FAILURE);
+  }
+
+  // Remove the newline character from the filename if present
+  filename[strcspn(filename, "\n")] = '\0';
   // to find out information about a file, we use the stat() function.. the parameters include pathname to file and a  refernce structure stat buffer
   struct stat buffer;
-  stat("file1.txt",&buffer); //this file must exist 
+  stat(filename,&buffer); //this file must exist 
   //now to display properties of the file... check "man 3type stat"
   printf("File Properties\n");
   printf("Inode : %lu\n",buffer.st_ino);
@@ -58,6 +71,7 @@ int main()
 /*
   aishjp@Aish-Linux:~/my-repo$ gcc 9.c
   aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Enter filename: file2.txt
   File Properties
   Inode : 789183
   Number of Hard links : 1
