@@ -11,12 +11,23 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 #define BUFFER_SIZE 1024  
-
+#define MAX_LENGTH 256
 int main() 
 { 
+    char filename[MAX_LENGTH];
+    // opening read and write mode withour O_EXCL
+    printf ("Enter filename: ");
+    if (fgets(filename, sizeof(filename), stdin) == NULL) {
+        perror("fgets");
+        exit(EXIT_FAILURE);
+    }
+
+    // Remove the newline character from the filename if present
+    filename[strcspn(filename, "\n")] = '\0';
     //opening file in read only mode
-    int fd = open("file.txt", O_RDONLY);
+    int fd = open(filename, O_RDONLY);
     if (fd == -1) {
         perror("Error opening file\n");
         return 1;
@@ -70,6 +81,7 @@ int main()
 /*
   aishjp@Aish-Linux:~/my-repo$ gcc 8.c
   aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Enter filename: file.txt
   I am an invisible man. 
   No, I am not a spook like those who haunted Edgar Allan Poe; nor am I one of your Hollywood-movie ectoplasms. 
   I am a man of substance, of flesh and bone, fiber and liquids—and I might even be said to possess a mind. 
