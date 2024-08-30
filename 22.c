@@ -33,7 +33,7 @@ int main() {
 
     if (pid == 0) {
         // Child process
-        const char *child_msg = "This is the child process writing to the file.\n";
+        const char *child_msg = "Child Process writing\n";
         for (int i = 0; i < 5; i++) {
             write(fd, child_msg, sizeof(child_msg) - 1);
             sleep(1); // Add some delay
@@ -42,7 +42,7 @@ int main() {
         exit(0);
     } else {
         // Parent process
-        const char *parent_msg = "This is the parent process writing to the file.\n";
+        const char *parent_msg = "Parent Process writing\n";
         for (int i = 0; i < 5; i++) {
             write(fd, parent_msg, sizeof(parent_msg) - 1);
             sleep(1); // Add some delay
@@ -62,8 +62,9 @@ int main() {
   aishjp@Aish-Linux:~/my-repo$ ./a.out
   File writing complete. Check output.txt for the result.
   
-  output.txt
-  This isThis isThis isThis isThis isThis isThis isThis isThis isThis is
+  output.txt************************************************************
+  Parent Child PParent Child PParent Child PParent Child PParent Child P
 */
 
 //the output comes as so because both parent and child processes are writing to the file concurrently, and file I/O operations are not synchronized
+//tried changing sleep durations however the output didn't change 
