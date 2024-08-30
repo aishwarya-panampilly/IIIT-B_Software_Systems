@@ -1,10 +1,11 @@
 /***************************************************************************************************
- *Name: Aishwarya J Panampilly
+ *Name: 10.c
+ *Author: Aishwarya J Panampilly
  *Reg.No: MT2024011
- *Problem Statement : Write a program to open a file with read write mode, write 10 bytes, move the  
-                      file pointer by 10 bytes (use lseek) and write again 10 bytes.
-                      a. check the return value of lseek
-                      b. open the file with od and check the empty spaces in between the data.
+ *Description : Write a program to open a file with read write mode, write 10 bytes, move the file pointer by 10 bytes (use lseek) and write again 10 bytes.
+                a. check the return value of lseek
+                b. open the file with od and check the empty spaces in between the data.
+ *Date: 30th August 2024
 ***************************************************************************************************/
 
 /******************************************SOLUTION************************************************/
@@ -21,6 +22,7 @@ int main() {
     }
 
     // Write 10 bytes to the file
+    printf("Writing first ten bytes to file\n");
     const char *data1 = "ABCDEFGHIJ";
     ssize_t bytes_written = write(fd, data1, 10);
     if (bytes_written != 10) {
@@ -40,6 +42,7 @@ int main() {
     }
 
     // Write another 10 bytes after the gap
+    printf("Writing second ten bytes to file\n");
     const char *data2 = "KLMNOPQRST";
     bytes_written = write(fd, data2, 10);
     if (bytes_written != 10) {
@@ -58,20 +61,15 @@ int main() {
 
 /******************************************OUTPUT************************************************/
 /*
-  aishjp@Aish-Linux:~/my-repo$ gcc Program_10.c
+  aishjp@Aish-Linux:~/my-repo$ gcc 10.c
   aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Writing first ten bytes to file
   lseek succeeded. Current file offset: 20
+  Writing second ten bytes to file
   Write operations completed. Use 'od -c testfile.txt' to inspect the file.
   aishjp@Aish-Linux:~/my-repo$ od -c testfile.txt
-  0000000   A   B   C   D   E   F   G   H   I   J   t   h       o   r   i
-  0000020   g   i   n   a   K   L   M   N   O   P   Q   R   S   T   c   r
-  0000040   i   p   t   o   r  \n   W   r   i   t   i   n   g       w   i
-  0000060   t   h       d   u   p       f   i   l   e       d   e   s   c
-  0000100   r   i   p   t   o   r  \n   W   r   i   t   i   n   g       w
-  0000120   i   t   h       d   u   p   2       f   i   l   e       d   e
-  0000140   s   c   r   i   p   t   o   r  \n   W   r   i   t   i   n   g
-  0000160       w   i   t   h       f   c   n   t   l       f   i   l   e
-  0000200       d   e   s   c   r   i   p   t   o   r  \n
-  0000214
+  0000000   A   B   C   D   E   F   G   H   I   J   l   d   !  \0  \0  \0
+  0000020  \0  \0  \0  \0   K   L   M   N   O   P   Q   R   S   T
+  0000036
 */
 
