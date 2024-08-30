@@ -12,18 +12,28 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#define MAX_LENGTH 256
 int main() 
 {
   int fp;
   int opt;
+  char filename[MAX_LENGTH];
   // opening read and write mode withour O_EXCL
+  printf ("Enter filename: ");
+  if (fgets(filename, sizeof(filename), stdin) == NULL) {
+        perror("fgets");
+        exit(EXIT_FAILURE);
+    }
+
+  // Remove the newline character from the filename if present
+  filename[strcspn(filename, "\n")] = '\0';
   printf ("Choose to open file \n1.With O_EXCL \n2.Without O_EXCL\n");
   scanf("%d",&opt);
   if (opt == 1) 
-    fp = open("file1.txt", O_EXCL | O_CREAT | O_RDWR,0666); 
+    fp = open(filename, O_EXCL | O_CREAT | O_RDWR,0666); 
     //O_EXCL will make open() fail if file exists 
   else if (opt == 2)
-    fp = open("file0.txt",O_CREAT | O_RDWR,0666);
+    fp = open(filename,O_CREAT | O_RDWR,0666);
   else
     printf("Incorrect Option\n");
   if ( fp == -1 ) {
@@ -59,6 +69,7 @@ int main()
 /*
   aishjp@Aish-Linux:~/my-repo$ gcc 4.c
   aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Enter filename: ft.txt
   Choose to open file 
   1.With O_EXCL 
   2.Without O_EXCL
@@ -66,17 +77,18 @@ int main()
   Successfully written string to file
   The file contents are : Hello World!
   aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Enter filename: ft.txt
+  Choose to open file 
+  1.With O_EXCL 
+  2.Without O_EXCL
+  1
+  Error opening file.File might already exist
+  aishjp@Aish-Linux:~/my-repo$ ./a.out
+  Enter filename: ft.txt
   Choose to open file 
   1.With O_EXCL 
   2.Without O_EXCL
   2
   Successfully written string to file
   The file contents are : Hello World!
-  aishjp@Aish-Linux:~/my-repo$ ./a.out
-  Choose to open file 
-  1.With O_EXCL 
-  2.Without O_EXCL
-  1
-  Error opening file.File might already exist
-
 */
