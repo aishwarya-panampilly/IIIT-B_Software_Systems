@@ -109,4 +109,9 @@ Hard Limit : -1
 Number of Processes 
 Soft Limit : 15194
 Hard Limit : 15194
+
+Number of Files 
+Soft Limit : 1024
+Hard Limit : 1048576
+
 */
