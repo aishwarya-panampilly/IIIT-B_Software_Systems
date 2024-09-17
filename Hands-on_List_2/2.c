@@ -43,10 +43,11 @@ int main()
   print_rlimit("Real-Time Priority",RLIMIT_RTPRIO);
   print_rlimit("Resident Set Size",RLIMIT_RSS);
   print_rlimit("Number of Processes",RLIMIT_NPROC);
+  print_rlimit("Number of Files",RLIMIT_NOFILE);
 }
       
 /******************************************OUTPUT************************************************/
-
+/*
 System Resource Limits
 
 Address Space 
@@ -108,4 +109,4 @@ Hard Limit : -1
 Number of Processes 
 Soft Limit : 15194
 Hard Limit : 15194
-
+*/
