@@ -48,7 +48,7 @@ int main()
    // at each expiration a SIGVTALRM is generated
    
    if (setitimer(ITIMER_VIRTUAL,&timer,NULL) == -1) {
-      perror("Error in setting timer!\n");
+      perror("Error in setting timer!");
       exit(1);
    }
    
@@ -58,6 +58,8 @@ int main()
    
    return 0;
 }
+
+/******************************************SOLUTION************************************************/
    
    
    
