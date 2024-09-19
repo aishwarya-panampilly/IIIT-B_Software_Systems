@@ -15,7 +15,7 @@
 
 void signal_handler(int signum) {
   printf("Caught SIGSEGV (Segmentation Fault) - Signal number %d\n",signum);
-  exit(EXIT_FAILURE);
+  exit(EXIT_SUCCESS);
 }
 
 int main() 
