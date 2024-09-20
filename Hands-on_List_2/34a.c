@@ -11,57 +11,101 @@
 //concurrent server handles multiple client requests simultaneously
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <string.h>
- 
+#include <unistd.h>
+#include <arpa/inet.h>
+
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-void client_interact(int client_socket) 
-{
-  char buffer[BUFFER_SIZE];
-  int bytes_read;
-  
-  // reading data from the client 
-  bytes_read = read(client_socket,buffer,sizeof(buffer)-1);
-  if (bytes_read < 0) {
-    perror("Read error!");
+void handle_client(int client_socket) {
+    char buffer[BUFFER_SIZE] = {0};
+
+    // Read data from the client
+    int valread = read(client_socket, buffer, BUFFER_SIZE);
+    printf("Message from client: %s\n", buffer);
+
+    // Send a response back to the client
+    const char *response = "Message received";
+    send(client_socket, response, strlen(response), 0);
+    
+    // Close the client socket
     close(client_socket);
-    exit(EXIT_FAILURE);
-  }
-  
-  //read doesn't have null terminate so manually doing that
-  buffer[bytes_read] = '\0';
-  printf("Received Data: %s\n",buffer);
-  
-  //responding to client 
-  const char* response = "Message Received";
-  write(client_socket,response,strlen(response));
-  close(client_socket);
 }
 
-int main()
-{
-  int server_socket,client_socket;
-  struct sockaddr_in server_addr,client_addr;
-  socklen_t client_addr_len = sizeof(client_addr);
-  pid_t child_pid;
-  server_socket = socket(AF_INET,SOCK_STREAM,0);
-  if (server_socket < 0) {
-    perror("Socket error!");
-    exit(EXIT_FAILURE);
-  }
-  
-  //setting up server address
-  memset(&server_addr,0,sizeof(server_addr));
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_addr.s_addr = INADDR_ANY;
-  server_addr.sin_port = htons(PORT);
-  
-  //binding the socket 
-  if (bind(server_socket(struct sockaddr*)&server_addr,sizeof(server_addr)) < 0)
-  {
-    
+int main() {
+    int server_fd, new_socket;
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
+
+    // Creating socket file descriptor
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        perror("Socket failed");
+        exit(EXIT_FAILURE);
+    }
+
+    // Set the address and port
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(PORT);
+
+    // Bind the socket to the port
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+        perror("Bind failed");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+
+    // Start listening for incoming connections
+    if (listen(server_fd, 3) < 0) {
+        perror("Listen failed");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Server is listening on port %d...\n", PORT);
+
+    while (1) {
+        // Accept incoming connection
+        new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
+        if (new_socket < 0) {
+            perror("Accept failed");
+            continue; // Continue to accept other connections
+        }
+
+        // Fork a new process to handle the client
+        pid_t pid = fork();
+        if (pid < 0) {
+            perror("Fork failed");
+            close(new_socket);
+        } else if (pid == 0) {
+            // In child process
+            close(server_fd); // Child does not need the listener
+            handle_client(new_socket);
+            exit(0); // Terminate child process after handling the client
+        } else {
+            // In parent process
+            close(new_socket); // Parent does not need this socket
+        }
+    }
+
+    // Close the server socket (unreachable in this example)
+    close(server_fd);
+    return 0;
+}
+
+//execute this server program first, then use netcat to connect to the server
+/******************************************OUTPUT************************************************/
+/*******************SERVER**********************/
+/*
+Server is listening on port 8080...
+Message from client: hello!
+*/
+/*******************CLIENT*********************/
+/*
+aishjp@Aish-Linux:~/my-repo/Hands-on_List_2$ nc localhost 8080
+hello!    
+Message received
+*/
+
+
