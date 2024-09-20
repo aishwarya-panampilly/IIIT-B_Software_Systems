@@ -2,7 +2,8 @@
  *Name: 32a.c
  *Author: Aishwarya J Panampilly
  *Reg.No: MT2024011
- *Description : 
+ *Description : Write a program to implement semaphore to protect any critical section.
+                a. rewrite the ticket number creation program using semaphore
  *Date: 20th September, 2024
 ***************************************************************************************************/
 
