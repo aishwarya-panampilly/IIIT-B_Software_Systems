@@ -15,34 +15,32 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+// Signal handler for SIGALRM
 void timer_handler(int signum) {
-    printf("Timer expired!\n");
+    printf("ITIMER_REAL expired! (SIGALRM)\n");
 }
 
 int main() {
-    struct sigaction sa;
     struct itimerval timer;
 
-    // Set up the signal handler for SIGALRM
-    sa.sa_handler = timer_handler;
-    sa.sa_flags = 0; // No flags
-    sigaction(SIGALRM, &sa, NULL);
+    // Set up the signal handler for SIGALRM using signal()
+    signal(SIGALRM, timer_handler);
 
     // Configure the timer to expire after 10 seconds and 10 microseconds
-    timer.it_value.tv_sec = 10; // Initial expiration
-    timer.it_value.tv_usec = 10; // Initial expiration (10 microseconds)
+    timer.it_value.tv_sec = 10;   // Initial expiration (seconds)
+    timer.it_value.tv_usec = 10;  // Initial expiration (microseconds)
     timer.it_interval.tv_sec = 0; // No repeating interval
-    timer.it_interval.tv_usec = 0; // No repeating interval
+    timer.it_interval.tv_usec = 0;
 
-    // Set the timer
+    // Set the ITIMER_REAL timer
     if (setitimer(ITIMER_REAL, &timer, NULL) == -1) {
         perror("setitimer");
         exit(EXIT_FAILURE);
     }
 
-    printf("Timer set for 10 seconds and 10 microseconds.\n");
+    printf("ITIMER_REAL timer set for 10 seconds and 10 microseconds.\n");
 
-    // Wait for the timer to expire
+    // Infinite loop to keep the program running and waiting for the signal
     while (1) {
         pause(); // Wait for signals
     }
@@ -51,6 +49,6 @@ int main() {
 }
 /******************************************OUTPUT************************************************/
 /*
-Timer set for 10 seconds and 10 microseconds.
-Timer expired!
+ITIMER_REAL timer set for 10 seconds and 10 microseconds.
+ITIMER_REAL expired! (SIGALRM)
 */
