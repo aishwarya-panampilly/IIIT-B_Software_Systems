@@ -46,4 +46,10 @@ int main() {
 
     return 0;
 }
+/******************************************OUTPUT************************************************/
+/*
+Client says: Hello from client!
+
+Enter response for client: Hello from server!
+*/
 
