@@ -50,4 +50,9 @@ int main() {
 
     return 0;
 }
+/******************************************OUTPUT************************************************/
+/*
+Enter message for server: Hello from client!
+Server says: Hello from server!
+*/
 
