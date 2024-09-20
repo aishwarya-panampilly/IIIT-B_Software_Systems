@@ -9,57 +9,56 @@
 
 /******************************************SOLUTION************************************************/
 #include <stdio.h>
-#include <sys/time.h>
-#include <signal.h>
-#include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <unistd.h>
 
-//signal handler is a function which is called by the target environment when the corresponding signal occurs. The environment suspends execution of the program till the signal handler returns.
-
-void signal_handler(int sig) {
-  //
-  char *buffer = "ITIMER_VIRTUAL signal received\n";
-  write (STDOUT_FILENO,buffer,strlen(buffer));
+// Signal handler for SIGVTALRM (ITIMER_VIRTUAL)
+void timer_handler(int signum) {
+    printf("ITIMER_VIRTUAL expired! (SIGVTALRM)\n");
 }
 
-int main() 
-{
-   // initialising a timer 
-   struct itimerval timer;
-   
-   //according to the ISO/ANSI standard, we need to call the signal function to identify the handler for the signal in the beginning of the program or at some point before the signal may occur
-   signal(SIGVTALRM,signal_handler);
-   
-   //it_interval sets the repeating interval after the first expiration 
-   //if it is set to 0, timer only expires once
-   timer.it_interval.tv_sec = 10;
-   timer.it_interval.tv_usec = 10; //microseconds
-   
-   //it_value sets the initial time before the timer expires for the FIRST TIME.
-   //if you set it to 10 secs, the timer will expire after 10 seconds and send signal
-   //if it is set to 0, timer is disarmed
-   timer.it_value.tv_sec = 10;
-   timer.it_value.tv_usec = 10;
-   
-   //now setting timer with setitimer, specify which timer, new timer and previous timer settings 
-   //we pass the address of timer as it requires a pointer
-   //ITIMER_VIRTUAL counts down against the user mode CPU time consumed by a process (including all the threads in that process)
-   // at each expiration a SIGVTALRM is generated
-   
-   if (setitimer(ITIMER_VIRTUAL,&timer,NULL) == -1) {
-      perror("Error in setting timer!");
-      exit(1);
-   }
-   
-   // to ensure that the program remains active to respond to signals, infinite loop is used
-   while (1) {
-   }
-   
-   return 0;
+void consume_cpu_time() {
+    // Perform CPU-bound work to simulate real usage
+    volatile int i;
+    for (i = 0; i < 1000000000000000; i++) {
+        // A busy loop to keep CPU busy
+    }
 }
 
-/******************************************SOLUTION************************************************/
-   
+int main() {
+    struct itimerval timer;
+
+    // Set up the signal handler for SIGVTALRM using signal()
+    signal(SIGVTALRM, timer_handler);
+
+    // Configure the timer to expire after 10 seconds and 10 microseconds
+    timer.it_value.tv_sec = 10;   // Initial expiration (seconds)
+    timer.it_value.tv_usec = 10;  // Initial expiration (microseconds)
+    timer.it_interval.tv_sec = 0; // No repeating interval
+    timer.it_interval.tv_usec = 0;
+
+    // Set the ITIMER_VIRTUAL timer
+    if (setitimer(ITIMER_VIRTUAL, &timer, NULL) == -1) {
+        perror("setitimer ITIMER_VIRTUAL");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("ITIMER_VIRTUAL timer set for 10 seconds and 10 microseconds.\n");
+
+    // Consume CPU time to trigger the ITIMER_VIRTUAL timer
+    while (1) {
+        consume_cpu_time(); // Keep CPU busy to simulate load
+        pause();            // Wait for signals (SIGVTALRM)
+    }
+
+    return 0;
+}
+/******************************************OUTPUT************************************************/
+/*
+ITIMER_VIRTUAL timer set for 10 seconds and 10 microseconds.
+ITIMER_VIRTUAL expired! (SIGVTALRM)
+*/
    
    
