@@ -19,7 +19,7 @@ int main() {
     key_t key;
     
     // Generate a unique key using ftok
-    key = ftok("progfile", 65); // You can replace "progfile" with your file
+    key = ftok("progfile", 65); 
     if (key == -1) {
         perror("ftok failed");
         exit(EXIT_FAILURE);
