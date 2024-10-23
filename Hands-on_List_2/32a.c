@@ -26,7 +26,7 @@
 // Define semaphore operations: wait (P) and signal (V)
 void sem_wait(int semid) {
     struct sembuf sb;
-    sb.sem_num = 0;    // Use the first (and only) semaphore in the set
+    sb.sem_num = 0;   
     sb.sem_op = -1;    // Decrement semaphore (wait/lock)
     sb.sem_flg = 0;    // No special flags
     if (semop(semid, &sb, 1) == -1) {
@@ -37,7 +37,7 @@ void sem_wait(int semid) {
 
 void sem_signal(int semid) {
     struct sembuf sb;
-    sb.sem_num = 0;    // Use the first (and only) semaphore in the set
+    sb.sem_num = 0;   
     sb.sem_op = 1;     // Increment semaphore (signal/unlock)
     sb.sem_flg = 0;    // No special flags
     if (semop(semid, &sb, 1) == -1) {
